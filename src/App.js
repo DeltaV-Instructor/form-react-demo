@@ -17,14 +17,64 @@ let data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 class App extends React.Component {
   //is a good place to add our helper functions
+  constructor(props) {
+    super(props);
+    this.state = {
+      userName: "",
+      howToSort: "",
+      sortedData: data,
+    };
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+
+    let userName = event.target.userName.value;
+    // console.log("🚀 ~ file: App.js:27 ~ App ~ userName", userName);
+    //add it to state
+    this.setState({
+      userName: userName,
+    });
+    console.log("user in state? ", this.state.userName);
+  };
+
+  handleInput = (event) => {
+    //we dont need to prevent default
+    let userName = event.target.value;
+    // console.log("🚀 ~ file: App.js:44 ~ App ~ userName", userName);
+    //now add to state
+    this.setState({
+      userName: userName,
+    });
+  };
+
+  handleSelect = (event) => {
+    let selected = event.target.value;
+    console.log("🚀 ~ file: App.js:53 ~ App ~ selected", selected);
+    //if even
+    if (selected === "even") {
+      //if odd
+      //filter over our array of numbers
+      let newData = data.filter((number) => number % 2 === 0);
+      //set state with the evens
+      this.setState({sortedData: newData});
+    } else if (selected === "odd") {
+      //filter over our array of numbers
+      let newData = data.filter((number) => number % 2 !== 0)
+      //set state with the odds
+      this.setState({sortedData: newData});
+    } else {
+      //set state back to everything
+      //give me back all the data
+      this.setState({sortedData: data});
+    }
+  };
 
   render() {
-    console.log("🚀 ~ file: App.js:18 ~ data", data);
-    let numbers = data.map((number,index) => {
-      return (
-        <ListGroup.Item key={index}>{number}</ListGroup.Item>
-      ) 
-
+    // // console.log("🚀 ~ file: App.js:18 ~ data", data);
+    // let numbers = data.map((number, index) => {
+      let numbers = this.state.sortedData.map((number, index) => {
+      return <ListGroup.Item key={index}>{number}</ListGroup.Item>;
     });
 
     return (
@@ -32,6 +82,26 @@ class App extends React.Component {
         <header>Forms in React</header>
         <main>
           <ListGroup>{numbers}</ListGroup>
+
+          <form onSubmit={this.handleSubmit}>
+            <label>
+              {/* with no back slash we get error */}
+              <input type="text" name="userName" onInput={this.handleInput} />
+            </label>
+            <fieldset>
+              <legend>Selected Numbers</legend>
+              <select name="selected" onChange={this.handleSelect}>
+                <option value="all">All</option>
+                <option value="even">Even</option>
+                <option value="odd">Odd</option>
+              </select>
+            </fieldset>
+            {/* how do we submit a form, there are several ways this is similar to
+           201 lets add a button, add the type for react be explicit for reacts sake
+          So now add event listener just like on click
+           */}
+            <button type="submit">Submit</button>
+          </form>
         </main>
       </>
     );
