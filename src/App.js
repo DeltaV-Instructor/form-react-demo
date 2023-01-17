@@ -2,7 +2,8 @@
 import React from "react";
 //bootstrap form
 import ListGroup from "react-bootstrap/ListGroup";
-
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 //form html
 //class
 //select for form
@@ -30,10 +31,17 @@ class App extends React.Component {
     event.preventDefault();
 
     let userName = event.target.userName.value;
-    // console.log("🚀 ~ file: App.js:27 ~ App ~ userName", userName);
+    // // console.log("🚀 ~ file: App.js:27 ~ App ~ userName", userName);
     //add it to state
+
+
+    let firstName = event.target.firstName.value;
+    console.log("🚀 ~ file: App.js:39 ~ firstName", firstName);
+    
+
     this.setState({
       userName: userName,
+
     });
     console.log("user in state? ", this.state.userName);
   };
@@ -41,7 +49,7 @@ class App extends React.Component {
   handleInput = (event) => {
     //we dont need to prevent default
     let userName = event.target.value;
-    // console.log("🚀 ~ file: App.js:44 ~ App ~ userName", userName);
+    // // console.log("🚀 ~ file: App.js:44 ~ App ~ userName", userName);
     //now add to state
     this.setState({
       userName: userName,
@@ -50,30 +58,30 @@ class App extends React.Component {
 
   handleSelect = (event) => {
     let selected = event.target.value;
-    console.log("🚀 ~ file: App.js:53 ~ App ~ selected", selected);
+    // console.log("🚀 ~ file: App.js:53 ~ App ~ selected", selected);
     //if even
     if (selected === "even") {
       //if odd
       //filter over our array of numbers
       let newData = data.filter((number) => number % 2 === 0);
       //set state with the evens
-      this.setState({sortedData: newData});
+      this.setState({ sortedData: newData });
     } else if (selected === "odd") {
       //filter over our array of numbers
-      let newData = data.filter((number) => number % 2 !== 0)
+      let newData = data.filter((number) => number % 2 !== 0);
       //set state with the odds
-      this.setState({sortedData: newData});
+      this.setState({ sortedData: newData });
     } else {
       //set state back to everything
       //give me back all the data
-      this.setState({sortedData: data});
+      this.setState({ sortedData: data });
     }
   };
 
   render() {
-    // // console.log("🚀 ~ file: App.js:18 ~ data", data);
+    // // // console.log("🚀 ~ file: App.js:18 ~ data", data);
     // let numbers = data.map((number, index) => {
-      let numbers = this.state.sortedData.map((number, index) => {
+    let numbers = this.state.sortedData.map((number, index) => {
       return <ListGroup.Item key={index}>{number}</ListGroup.Item>;
     });
 
@@ -83,25 +91,45 @@ class App extends React.Component {
         <main>
           <ListGroup>{numbers}</ListGroup>
 
-          <form onSubmit={this.handleSubmit}>
-            <label>
+          <Form onSubmit={this.handleSubmit}>
+            {/* to make label and input siblings in react forms in plain old html we would use for attribute to denote which input goes with label tag. Need and 'id' and a 'for' */}
+            <Form.Label>Name: 
               {/* with no back slash we get error */}
               <input type="text" name="userName" onInput={this.handleInput} />
-            </label>
-            <fieldset>
-              <legend>Selected Numbers</legend>
-              <select name="selected" onChange={this.handleSelect}>
-                <option value="all">All</option>
-                <option value="even">Even</option>
-                <option value="odd">Odd</option>
-              </select>
-            </fieldset>
+            </Form.Label>
+            
+
+            {/* 
+            <Form.Label htmlFor="name">Name: 
+              with no back slash we get error
+              <input type="text" name="userName" onInput={this.handleInput} id="name"/>
+            </Form.Label> */}
+            {/* One Way to add the for and id
+              <Form.Label add for="" but we need the htmlFor="" >First Name:</Form.Label>
+              <Form.Control type="text" add id="lastName" />
+            */}
+
+            <Form.Group controlId="firstName">
+              <Form.Label>Name:</Form.Label>
+                <Form.Control  type="text" />
+                {/* with no back slash we get error */}
+                {/* <input type="text" name="userName" onInput={this.handleInput} /> */}
+              
+            </Form.Group>
+
+            <p>Selected Numbers</p>
+            <Form.Select name="selected" onChange={this.handleSelect}>
+              <option value="all">All</option>
+              <option value="even">Even</option>
+              <option value="odd">Odd</option>
+            </Form.Select>
+
             {/* how do we submit a form, there are several ways this is similar to
            201 lets add a button, add the type for react be explicit for reacts sake
           So now add event listener just like on click
            */}
-            <button type="submit">Submit</button>
-          </form>
+            <Button type="submit">Submit</Button>
+          </Form>
         </main>
       </>
     );
@@ -110,3 +138,23 @@ class App extends React.Component {
 
 //3.
 export default App;
+
+// <form onSubmit={this.handleSubmit}>
+// <label>
+//   with no back slash we get error
+//   <input type="text" name="userName" onInput={this.handleInput} />
+// </label>
+// <fieldset>
+//   <legend>Selected Numbers</legend>
+//   <select name="selected" onChange={this.handleSelect}>
+//     <option value="all">All</option>
+//     <option value="even">Even</option>
+//     <option value="odd">Odd</option>
+//   </select>
+// </fieldset>
+// how do we submit a form, there are several ways this is similar to
+// 201 lets add a button, add the type for react be explicit for reacts sake
+// So now add event listener just like on click
+
+// <button type="submit">Submit</button>
+// </form>
